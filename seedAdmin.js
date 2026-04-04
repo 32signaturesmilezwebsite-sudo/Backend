@@ -5,24 +5,33 @@ const Admin = require("./models/Admin");
 
 dotenv.config();
 
+const admins = [
+  {
+    username: "admin",
+    password: "password123",
+  },
+  {
+    username: "32signaturesmilez@gmail.com",
+    password: "Dr.Deep_Datta2026",
+  },
+];
+
 const seedAdmin = async () => {
   try {
     await connectDB();
-    
-    // Check if admin already exists
-    const adminExists = await Admin.findOne({ username: "admin" });
-    if (adminExists) {
-      console.log("Admin user already exists");
-      process.exit(0);
+
+    for (const adminData of admins) {
+      const exists = await Admin.findOne({ username: adminData.username });
+      if (exists) {
+        console.log(`Admin "${adminData.username}" already exists — skipping.`);
+        continue;
+      }
+
+      const admin = new Admin(adminData);
+      await admin.save();
+      console.log(`✅ Admin created: ${adminData.username}`);
     }
 
-    const admin = new Admin({
-      username: "admin",
-      password: "password123", // default password, change in production
-    });
-
-    await admin.save();
-    console.log("Admin created successfully! Username: admin, Password: password123");
     process.exit(0);
   } catch (error) {
     console.error(`Error: ${error.message}`);
