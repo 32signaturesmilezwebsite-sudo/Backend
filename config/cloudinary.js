@@ -13,8 +13,9 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: '32SignatureSmilez_Blogs',
-    allowedFormats: ['jpeg', 'png', 'jpg', 'webp'],
+    folder: '32SignatureSmilez_Uploads',
+    allowedFormats: ['jpeg', 'png', 'jpg', 'webp', 'mp4', 'mov', 'webm'],
+    resource_type: 'auto',
   },
 });
 

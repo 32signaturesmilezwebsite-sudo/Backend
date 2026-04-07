@@ -70,6 +70,28 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Update a blog (Admin)
+router.put("/:id", upload.single("thumbnail"), async (req, res) => {
+  try {
+    const { title, content, excerpt, category, publishDate } = req.body;
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+
+    blog.title = title || blog.title;
+    blog.content = content || blog.content;
+    blog.excerpt = excerpt !== undefined ? excerpt : blog.excerpt;
+    blog.category = category !== undefined ? category : blog.category;
+    if (publishDate) blog.publishDate = publishDate;
+    if (req.file) blog.thumbnail = req.file.path;
+
+    const updated = await blog.save();
+    res.json(updated);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Delete a blog (Admin)
 router.delete("/:id", async (req, res) => {
   try {
