@@ -9,13 +9,14 @@ const upload = multer({ storage });
 // Create a new blog (Admin)
 router.post("/", upload.single("thumbnail"), async (req, res) => {
   try {
-    const { title, content, excerpt, publishDate } = req.body;
+    const { title, content, excerpt, category, publishDate } = req.body;
     const thumbnail = req.file ? req.file.path : null;
 
     const newBlog = new Blog({
       title,
       content,
       excerpt,
+      category,
       thumbnail,
       publishDate: publishDate || Date.now(),
     });
